@@ -89,7 +89,7 @@ with col1:
 
 # Gráfico de pizza para status dos animes
 with col2:
-    st.subheader("Proporção de Status dos Animes (Filtrado)")
+    st.subheader("Proporção de Status dos Animes")
     
     # Renomear as categorias
     df_filtrado['Status'] = df_filtrado['Status'].replace({'Finished Airing': 'Concluído', 
