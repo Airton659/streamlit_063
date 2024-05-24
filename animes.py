@@ -29,17 +29,6 @@ st.set_page_config(
     initial_sidebar_state='expanded'
 )
 
-# st.markdown(
-#     """
-#     <style>
-#     .stApp {
-#         background-color: white;
-#     }
-#     </style>
-#     """,
-#     unsafe_allow_html=True
-# )
-
 # Título da página
 st.title('Top 1000 Animes 2024')
 
@@ -59,9 +48,6 @@ tipo_selecionado = st.sidebar.multiselect('Selecione o Tipo:', tipos)
 if not tipo_selecionado: #verifica se not tipo_selecionado é False (preenchida) ou True (Sem seleção), caso seja true, define como todos os tipos
     tipo_selecionado = tipos
 
-# # Filtro por Popularidade
-# popularidade_min = st.sidebar.slider('Popularidade Mínima:', min_value=df['Popularity'].min(), max_value=df['Popularity'].max(), value=df['Popularity'].min())
-# popularidade_max = st.sidebar.slider('Popularidade Máxima:', min_value=df['Popularity'].min(), max_value=df['Popularity'].max(), value=df['Popularity'].max())
 
 # Filtro por Popularidade (Range Slider)
 popularidade_range = st.sidebar.slider(
@@ -74,8 +60,9 @@ popularidade_range = st.sidebar.slider(
 popularidade_min, popularidade_max = popularidade_range
 
 
+# Filtro por Rank (Range Slider)
 rank_range = st.sidebar.slider(
-    'Selecione o intervalo de Popularidade:',
+    'Selecione o intervalo de Rank:',
     min_value=int(df['Rank'].min()),
     max_value=int(df['Rank'].max()),
     value=(int(df['Rank'].min()), int(df['Rank'].max()))
@@ -83,13 +70,8 @@ rank_range = st.sidebar.slider(
 
 rank_min, rank_max = rank_range
 
-# # Filtro por Rank
-# rank_min = st.sidebar.slider('Rank Mínimo:', min_value=int(df['Rank'].min()), max_value=int(df['Rank'].max()), value=int(df['Rank'].min()))
-# rank_max = st.sidebar.slider('Rank Máximo:', min_value=int(df['Rank'].min()), max_value=int(df['Rank'].max()), value=int(df['Rank'].max()))
-
-
-
 # Verificar se nenhum filtro foi selecionado
+#Se nenhum gênero for selecionado, aplica apenas os filtros de tipo, popularidade e rank. Se um gênero for selecionado, aplica todos os filtros incluindo o gênero.
 if not genero_selecionado:
     df_filtrado = df[(df['Type'].isin(tipo_selecionado)) &
                      (df['Popularity'].between(popularidade_min, popularidade_max)) &
@@ -99,6 +81,9 @@ else:
                      (df['Type'].isin(tipo_selecionado)) &
                      (df['Popularity'].between(popularidade_min, popularidade_max)) &
                      (df['Rank'].between(rank_min, rank_max))]
+
+# Exibir número de registros filtrados na barra lateral
+st.sidebar.markdown(f"### Número de registros filtrados: {len(df_filtrado)}")
 
 # Definir cor padrão
 cor_padrao = '#1f77b4'  
@@ -133,22 +118,17 @@ with col2:
                   color_discrete_sequence=[cor_padrao],
                   width=400, height=300)
     
-    fig2.update_traces(textposition='inside', textinfo='percent',insidetextfont=dict(color='white'))
+    fig2.update_traces(textinfo='percent',insidetextfont=dict(color='white'))
     
     st.plotly_chart(fig2, use_container_width=True)
     st.write("Este gráfico de pizza mostra a proporção de status dos animes")
 
 # Gráfico de caixa Gênero por Pontos
 st.subheader("Score por Gênero")
-df_filtrado['Outlier_Info'] = df_filtrado.apply(lambda row: f"Rank: {row['Rank']}, English: {row['English']}" if row['Score'] > df_filtrado['Score'].quantile(0.95) else '', axis=1)
 fig5 = px.box(df_filtrado, x='MainGenres', y='Score',
              labels={'MainGenres': 'Gênero', 'Score': 'Pontuação'},
              color_discrete_sequence=[cor_padrao],
              width=400, height=300)
-
-fig5.update_traces(marker=dict(color='rgb(158,202,225)', size=7),
-                  selector=dict(type='box'), boxpoints='outliers', hoverinfo='y+text',
-                  hovertext=df_filtrado['Outlier_Info'])
 
 st.plotly_chart(fig5, use_container_width=True)
 st.write("Este gráfico de caixa mostra a distribuição dos scores por gênero.")
@@ -158,7 +138,7 @@ st.write("Este gráfico de caixa mostra a distribuição dos scores por gênero.
 with col1:
     st.subheader("Dispersão de Popularidade vs. Score")
     fig3 = px.scatter(df_filtrado, x='Popularity', y='Score',
-                      hover_name=df_filtrado.apply(lambda row: row['English'] if pd.notnull(row['English']) else row['Japanese'], axis=1),
+                      hover_name=df_filtrado.apply(lambda row: row['English'] if pd.notnull(row['English']) else row['Japanese'], axis=1), #Caso não tenha o nome em inglês, trazer o nome em japonês ao passar o mouse por cima
                       hover_data=['Rank', 'MainGenres'],
                       color_discrete_sequence=[cor_padrao],
                       width=400, height=300)
