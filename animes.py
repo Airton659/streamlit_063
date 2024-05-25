@@ -147,7 +147,7 @@ with col3:
 
 # Gráfico de Dispersão para Popularidade vs Score
 with col1:
-    st.subheader("Popularidade x Score")
+    st.subheader("Popularidade x Pontuação")
     fig3 = px.scatter(df_filtrado, x='Popularidade', y='Pontuação',
                       hover_name=df_filtrado.apply(lambda row: row['English'] if pd.notnull(row['English']) else row['Japanese'], axis=1), #Caso não tenha o nome em inglês, trazer o nome em japonês ao passar o mouse por cima
                       hover_data=['Rank', 'MainGenres'],
@@ -175,7 +175,7 @@ with col3:
 
 # Gráfico de caixa Gênero por Pontos
 with col2:   
-    st.subheader("Score x Gênero")
+    st.subheader("Pontuação x Gênero")
     fig5 = px.box(df_filtrado, x='MainGenres', y='Score',
                  labels={'MainGenres': 'Gênero', 'Score': 'Pontuação'},
                  color_discrete_sequence=[cor_padrao],
