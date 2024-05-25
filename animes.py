@@ -148,7 +148,7 @@ with col3:
 # Gráfico de Dispersão para Popularidade vs Score
 with col1:
     st.subheader("Popularidade x Score")
-    fig3 = px.scatter(df_filtrado, x='Popularity', y='Score',
+    fig3 = px.scatter(df_filtrado, x='Popularidade', y='Pontuação',
                       hover_name=df_filtrado.apply(lambda row: row['English'] if pd.notnull(row['English']) else row['Japanese'], axis=1), #Caso não tenha o nome em inglês, trazer o nome em japonês ao passar o mouse por cima
                       hover_data=['Rank', 'MainGenres'],
                       color_discrete_sequence=[cor_padrao],
