@@ -138,7 +138,7 @@ with col3:
             <p><strong>Rank:</strong> {anime_melhor_rank['Rank']}</p>
             <p><strong>Popularidade:</strong> {anime_melhor_rank['Popularity']}</p>
             <p><strong>Score:</strong> {anime_melhor_rank['Score']}</p>
-            <p><strong>Score:</strong> {anime_melhor_rank['Studios']}</p>
+            <p><strong>Estudio:</strong> {anime_melhor_rank['Studios']}</p>
         </div>
         """,
         unsafe_allow_html=True
@@ -167,7 +167,7 @@ with col3:
             <p><strong>Rank:</strong> {anime_mais_popular['Rank']}</p>
             <p><strong>Popularidade:</strong> {anime_mais_popular['Popularity']}</p>
             <p><strong>Score:</strong> {anime_mais_popular['Score']}</p>
-            <p><strong>Score:</strong> {anime_mais_popular['Studios']}</p>
+            <p><strong>Estúdio:</strong> {anime_mais_popular['Studios']}</p>
         </div>
         """,
         unsafe_allow_html=True
