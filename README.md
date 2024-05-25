@@ -24,7 +24,9 @@ A criação do dashboard permite aos usuários filtrar os animes com base em dif
 
 ![Visualização dos Resultados](images/Graficos.png) 
 
-4. **Interpretação dos Gráficos:** Os gráficos de barras e pizza oferecem uma visão geral da distribuição dos gêneros de animes e do status de transmissão. O gráfico de dispersão mostra a relação entre popularidade e pontuação, enquanto o histograma apresenta a distribuição da duração dos episódios. Por fim, o gráfico de caixa permite comparar os scores dos animes por gênero.
+4. **Interpretação dos Gráficos:** É possível alterar a cor dos gráficos apresntados a fim de se obter a melhor visualização. Os gráficos de barras e pizza oferecem uma visão geral da distribuição dos gêneros de animes e do status de transmissão. O gráfico de dispersão mostra a relação entre popularidade e pontuação, enquanto o histograma apresenta a distribuição da duração dos episódios. Por fim, o gráfico de caixa permite comparar os scores dos animes por gênero.
+
+![Alteração da cor dos gráficos](images/Cor.png)
 
 
 ### Tecnologias Utilizadas
