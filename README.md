@@ -27,9 +27,47 @@ A criação do dashboard permite aos usuários filtrar os animes com base em dif
 4. **Interpretação dos Gráficos:** Os gráficos de barras e pizza oferecem uma visão geral da distribuição dos gêneros de animes e do status de transmissão. O gráfico de dispersão mostra a relação entre popularidade e pontuação, enquanto o histograma apresenta a distribuição da duração dos episódios. Por fim, o gráfico de caixa permite comparar os scores dos animes por gênero.
 
 
-## Tecnologias Utilizadas
+### Tecnologias Utilizadas
+- **Linguagem de Programação:** 
+    Python
+- **Bibliotecas e Frameworks:**
+  - Streamlit: Utilizado para criar a interface do usuário interativa.
+  - Plotly e Plotly Express: Utilizados para gerar visualizações interativas de dados.
+  - Pandas: Utilizado para manipulação e análise de dados.
+  - Matplotlib: Utilizado para criação de gráficos estáticos.
+  - Re: Utilizado para manipulação de expressões regulares.
 
-- Python
-- Streamlit
-- Pandas
-- Plotly
+## Informações sobre os Dados Originais
+
+A base de dados utilizada neste projeto contém informações detalhadas sobre os 1000 animes mais populares, incluindo:
+
+- **Rank**: A posição do anime no ranking.
+- **Title**: O título do anime.
+- **Score**: A pontuação do anime.
+- **Popularity**: A popularidade do anime.
+- **Type**: O tipo do anime (ex. TV, Movie).
+- **Studios**: Os estúdios que produziram o anime.
+
+### Primeira linha do DataFrame ###
+
+  | Score|  Popularity | Rank |  Members | ...  |                         Genres                   |     Demographic |    Duration     |               Rating            |
+  |------|-------------|------|----------|------|--------------------------------------------------|-----------------|-----------------|---------------------------------|
+  | 9.38 |       284   |  1   |   710    | ...  |   AdventureAdventure, DramaDrama, FantasyFantasy |  ShounenShounen | 24 min. per ep. |      PG-13 - Teens 13 or older  |
+
+
+## Instruções para Executar o Projeto
+
+1. Clone este repositório:
+   
+    git clone https://github.com/Airton659/streamlit_063.git
+   
+2. Instale as dependências necessárias:
+   
+    pip install -r requirements.txt
+
+3. Execute o aplicativo Streamlit:
+   
+    streamlit run caminho\da\pasta\animes.py
+
+
+   
