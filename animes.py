@@ -11,6 +11,8 @@ def remover_redundancia(texto):
 df_original = pd.read_csv('Top_Anime_data.csv')
 df = df_original.copy()
 
+# st.write(df_original)
+
 # Tratando coluna Genres
 df['MainGenres'] = df['Genres'].str.split(',').str[0]
 df['MainGenres'] = df['MainGenres'].astype(str)
@@ -35,6 +37,9 @@ st.title('Top 1000 Animes 2024')
 # Barra lateral com filtros
 # st.sidebar.header('Filtros')
 st.sidebar.markdown("José Airton Marques Júnior - 063", unsafe_allow_html=True)
+
+# Definir a cor dos gráficos
+cor_padrao = st.sidebar.color_picker('Escolha a cor padrão para os gráficos', '#1f77b4')
 
 # Filtro por Gênero
 generos = df['MainGenres'].unique().tolist() #Criando uma lista com as opções disponíveis na coluna MainGenres
@@ -66,6 +71,7 @@ rank_range = st.sidebar.slider(
     min_value=int(df['Rank'].min()),
     max_value=int(df['Rank'].max()),
     value=(int(df['Rank'].min()), int(df['Rank'].max()))
+    
 )
 
 rank_min, rank_max = rank_range
@@ -85,15 +91,12 @@ else:
 # Exibir número de registros filtrados na barra lateral
 st.sidebar.markdown(f"### Número de registros filtrados: {len(df_filtrado)}")
 
-# Definir cor padrão
-cor_padrao = '#1f77b4'  
-
 # Organizar os gráficos em duas colunas
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 
 # Gráfico de barras para gêneros
 with col1:
-    st.subheader("Número de Animes por Gênero (Filtrado)")
+    st.subheader("Animes x Gênero")
     soma_por_genero = df_filtrado['MainGenres'].value_counts().reset_index()
     soma_por_genero.columns = ['MainGenres', 'Count']
     fig1 = px.bar(soma_por_genero, x='Count', y='MainGenres', orientation='h', 
@@ -107,7 +110,7 @@ with col1:
 
 # Gráfico de pizza para status dos animes
 with col2:
-    st.subheader("Proporção de Status dos Animes")
+    st.subheader("Animes x Status")
     
     # Renomear as categorias
     df_filtrado['Status'] = df_filtrado['Status'].replace({'Finished Airing': 'Concluído', 
@@ -118,25 +121,33 @@ with col2:
                   color_discrete_sequence=[cor_padrao],
                   width=400, height=300)
     
-    fig2.update_traces(textinfo='percent',insidetextfont=dict(color='white'))
+    fig2.update_traces(textinfo='percent')
     
     st.plotly_chart(fig2, use_container_width=True)
     st.write("Este gráfico de pizza mostra a proporção de status dos animes")
 
-# Gráfico de caixa Gênero por Pontos
-st.subheader("Score por Gênero")
-fig5 = px.box(df_filtrado, x='MainGenres', y='Score',
-             labels={'MainGenres': 'Gênero', 'Score': 'Pontuação'},
-             color_discrete_sequence=[cor_padrao],
-             width=400, height=300)
 
-st.plotly_chart(fig5, use_container_width=True)
-st.write("Este gráfico de caixa mostra a distribuição dos scores por gênero.")
+# Card para o anime com maior Rank
+with col3:
+    st.subheader("Anime com Melhor Rank")
+    anime_melhor_rank = df_filtrado.loc[df_filtrado['Rank'].idxmin()]
+    st.markdown(
+        f"""
+        <div style="padding: 10px; border-radius: 10px; width: 100%;  height: 390px;">
+            <p><strong>Nome:</strong> {anime_melhor_rank['English'] if pd.notnull(anime_melhor_rank['English']) else anime_melhor_rank['Japanese']}</p>
+            <p><strong>Rank:</strong> {anime_melhor_rank['Rank']}</p>
+            <p><strong>Popularidade:</strong> {anime_melhor_rank['Popularity']}</p>
+            <p><strong>Score:</strong> {anime_melhor_rank['Score']}</p>
+            <p><strong>Score:</strong> {anime_melhor_rank['Studios']}</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 # Gráfico de Dispersão para Popularidade vs Score
 with col1:
-    st.subheader("Dispersão de Popularidade vs. Score")
+    st.subheader("Popularidade x Score")
     fig3 = px.scatter(df_filtrado, x='Popularity', y='Score',
                       hover_name=df_filtrado.apply(lambda row: row['English'] if pd.notnull(row['English']) else row['Japanese'], axis=1), #Caso não tenha o nome em inglês, trazer o nome em japonês ao passar o mouse por cima
                       hover_data=['Rank', 'MainGenres'],
@@ -145,18 +156,46 @@ with col1:
     st.plotly_chart(fig3, use_container_width=True)
     st.write("Este gráfico mostra a relação entre popularidade e score dos animes.")
 
-# Histograma para Duração dos Episódios
-with col2:
-    st.subheader("Histograma da Duração dos Animes")
-    fig4 = px.histogram(df_filtrado, x='Duration', color_discrete_sequence=[cor_padrao],
+
+with col3:
+    st.subheader("Anime mais Popular")
+    anime_mais_popular = df_filtrado.loc[df_filtrado['Popularity'].idxmax()]
+    st.markdown(
+        f"""
+        <div style="padding: 10px; border-radius: 10px; width: 100%;  height: 420px;">
+            <p><strong>Nome:</strong> {anime_mais_popular['English'] if pd.notnull(anime_mais_popular['English']) else anime_mais_popular['Japanese']}</p>
+            <p><strong>Rank:</strong> {anime_mais_popular['Rank']}</p>
+            <p><strong>Popularidade:</strong> {anime_mais_popular['Popularity']}</p>
+            <p><strong>Score:</strong> {anime_mais_popular['Score']}</p>
+            <p><strong>Score:</strong> {anime_mais_popular['Studios']}</p>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# Gráfico de caixa Gênero por Pontos
+with col2:   
+    st.subheader("Score x Gênero")
+    fig5 = px.box(df_filtrado, x='MainGenres', y='Score',
+                 labels={'MainGenres': 'Gênero', 'Score': 'Pontuação'},
+                 color_discrete_sequence=[cor_padrao],
                  width=400, height=300)
-    st.plotly_chart(fig4, use_container_width=True)
-    st.write("Este histograma mostra a distribuição da duração dos episódios dos animes.")
+    
+    st.plotly_chart(fig5, use_container_width=True)
+    st.write("Este gráfico de caixa mostra a distribuição dos scores por gênero.")
 
-# Gráfico de barras de animes por estúdio
-st.subheader('Animes por Estúdio')
-studio_counts = df_filtrado['Studios'].value_counts().sort_values(ascending=False)
-st.bar_chart(studio_counts, use_container_width=True)
-st.write("Este gráfico mostra os estúdios que têm produzido mais animes")
 
+# # Gráfico de barras de animes por estúdio
+# st.subheader('Animes por Estúdio')
+# studio_counts = df_filtrado['Studios'].value_counts().sort_values(ascending=False)
+# st.bar_chart(studio_counts, use_container_width=True)
+# st.write("Este gráfico mostra os estúdios que têm produzido mais animes")
+
+# # # Histograma para Duração dos Episódios
+# with col2:
+#     st.subheader("Histograma da Duração dos Animes")
+#     fig4 = px.histogram(df_filtrado, x='Duration', color_discrete_sequence=[cor_padrao],
+#                  width=400, height=300)
+#     st.plotly_chart(fig4, use_container_width=True)
+#     st.write("Este histograma mostra a distribuição da duração dos episódios dos animes.")
 
